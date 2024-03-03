@@ -9,7 +9,13 @@ var cors = require("cors");
 const dbConnection = require("./api/config/connection");
 
 mongoose.Promise = global.Promise;
-app.use(cors());
+app.use(cors(
+    {
+        origin : ["https://expo-connect-backend.vercel.app"],
+        methods : ["GET", "POST", "PUT"],
+        credentials : true
+    }
+));
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
