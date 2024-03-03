@@ -14,20 +14,20 @@ Use the admin panel to view and manage captured records.
 ## Folder Structure
 The project folder structure is organized as follows:
 
-- `form/`: Contains the frontend form application built with React.js.
-- `admin-panel/`: Contains the admin panel application built with React.js.
-- `server/`: Contains the backend Node.js application.
+- `front/`: Contains the frontend form application built with React.js.
+- `admin/`: Contains the admin panel application built with React.js.
+- `node-api/`: Contains the backend Node.js application.
 
 ## Installation
 - To run the project locally, follow these steps
 1. Star this repository.
 2. Clone this repository.
-3. Navigate to the form/ directory and run npm install to install frontend dependencies.
-4. Navigate to the admin-panel/ directory and run npm install to install frontend dependencies.
-5. Navigate to the server/ directory and run npm install to install backend dependencies.
+3. Navigate to the front/ directory and run npm install to install frontend dependencies.
+4. Navigate to the admin/ directory and run npm install to install frontend dependencies.
+5. Navigate to the node-api/ directory and run npm install to install backend dependencies.
 6. Start the MongoDB server.
-7. In the server/ directory, run npm start to start the backend server.
-8. In separate terminals, navigate to the form/ and admin-panel/ directories and run npm start to start the frontend applications.
+7. In the node-api/ directory, run npm start to start the backend server.
+8. In separate terminals, navigate to the front/ and admin/ directories and run npm start to start the frontend applications.
 9. Access the form application at http://localhost:3000 and the admin panel at http://localhost:3001.
 10. Make sure to change .env as required (added .env.example for easy understanding).
 
