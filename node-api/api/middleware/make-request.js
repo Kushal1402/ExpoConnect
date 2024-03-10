@@ -1,6 +1,6 @@
 const fs = require('fs')
 const moment = require('moment')
-const Helper = require('../helper/index')
+const Helper = require('../helper/helper')
 
 module.exports = async (req, res, next) => {
     try {

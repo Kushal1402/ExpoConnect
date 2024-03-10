@@ -10,16 +10,10 @@ const dbConnection = require("./api/config/connection");
 
 const AdminRoutes = require("./api/routes/admin/admin");
 const AdminRecordRoutes = require("./api/routes/admin/record_admin");
-const ExhibitionForm = require("./api/controller/front/record");
+const ExhibitionForm = require("./api/routes/front/record");
 
 mongoose.Promise = global.Promise;
-app.use(cors(
-    {
-        origin : ["https://expo-connect-backend.vercel.app"],
-        methods : ["GET", "POST", "PUT"],
-        credentials : true
-    }
-));
+app.use(cors({ origin: "*", credentials: true }));
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -32,28 +26,12 @@ app.use("/api/admin/record", AdminRecordRoutes);
 // For Front
 app.use("/api/form", ExhibitionForm);
 
-app.use("/cancel", (req, res) => {
-    console.log("cancel");
-    console.log(req);
-});
-
-app.get("/", (req, res) => {
+app.use("/", (req, res) => {
     console.log("success");
-    console.log(req);
-    res.json("Api success")
+    res.send("Api success")
 });
 
-app.use((req, res, next) => {
-    const error = new Error("Not Found");
-    error.status = 404;
-    next(error);
-});
-
-app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        message: error.message,
-    });
-});
-
-module.exports = app;
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+    console.log('Server started at : ' + port)
+})
