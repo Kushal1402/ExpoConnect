@@ -26,7 +26,7 @@ app.use("/api/admin/record", AdminRecordRoutes);
 // For Front
 app.use("/api/form", ExhibitionForm);
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
     console.log("success");
     res.send("Api success")
 });
