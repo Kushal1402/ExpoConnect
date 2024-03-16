@@ -17,18 +17,17 @@ app.use(cors({ origin: "*", credentials: true }));
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use("/uploads", express.static("uploads"));
 
 // For Admin
 app.use("/api/admin", AdminRoutes);
 app.use("/api/admin/record", AdminRecordRoutes);
 
 // For Front
-app.use("/api/form", ExhibitionForm);
+app.use("/api/record", ExhibitionForm);
 
 app.get("/", (req, res) => {
     console.log("success");
-    res.send("Api success")
+    res.send(`Api running .... connected db : ${process.env.MONGO_HOST}`)
 });
 
 const port = process.env.PORT || 5000;

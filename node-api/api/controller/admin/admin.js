@@ -58,10 +58,6 @@ exports.createAdmin = async (req, res) => {
             password: passwordBcrpy,
         });
 
-        if (req.file) {
-            newAdmin.profilePic = req.file.filename;
-        }
-
         const result = await newAdmin.save();
 
         // JWT token generate
@@ -133,7 +129,7 @@ exports.login = async (req, res, next) => {
         if (admin.profilePic == "") {
             admin.profilePic = ""
         } else {
-            admin.profilePic = process.env.SITE_URL + process.env.ADMIN_PROFILE + admin.profilePic
+            admin.profilePic = admin.profilePic
         }
 
         return res.status(200).json({
@@ -196,10 +192,7 @@ exports.editAdmin = async (req, res) => {
 
     const { name, email, password } = req.body;
     try {
-        const updateObj = {};
-        if (req.file) {
-            updateObj.profilePic = req.file.filename;
-        }
+        const updateObj = {};        
         if (name) updateObj.adminName = name;
         if (password) updateObj.password = await bcrypt.hash(password, 10);
         // if (email) updateObj.email = email;
@@ -232,7 +225,7 @@ exports.editAdmin = async (req, res) => {
         if (result.profilePic == "") {
             result.profilePic = ""
         } else {
-            result.profilePic = process.env.SITE_URL + process.env.ADMIN_PROFILE + result.profilePic
+            result.profilePic = result.profilePic
         }
 
         return res.status(200).json({
@@ -251,7 +244,7 @@ exports.editAdmin = async (req, res) => {
 exports.auth = async (req, res) => {
     try {
         let admin = await AdminModel.aggregate([
-            { $match: { _id: mongoose.Types.ObjectId(req.userData.id) } },
+            { $match: { _id: new mongoose.Types.ObjectId(req.userData.id) } },
             {
                 $project: {
                     adminName: 1,
@@ -266,13 +259,14 @@ exports.auth = async (req, res) => {
         if (admin[0].profilePic == "") {
             admin[0].profilePic = ""
         } else {
-            admin[0].profilePic = process.env.SITE_URL + process.env.ADMIN_PROFILE + admin[0].profilePic
+            admin[0].profilePic = admin[0].profilePic
         }
         return res.status(200).send({
             message: "Admin auth retrived",
             result: admin[0],
         });
     } catch (err) {
+        console.log("err:", err)
         const request = req;
         Helper.writeErrorLog(request, err);
         return res.status(500).json({
