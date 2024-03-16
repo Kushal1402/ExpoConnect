@@ -267,8 +267,6 @@ exports.auth = async (req, res) => {
         });
     } catch (err) {
         console.log("err:", err)
-        const request = req;
-        Helper.writeErrorLog(request, err);
         return res.status(500).json({
             message: "Error occurred, Please try again later",
             error: err,

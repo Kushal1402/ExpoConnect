@@ -47,7 +47,6 @@ exports.add = async (req, res, next) => {
         });
     } catch (error) {
         console.log("Add data error", error);
-        helper.writeErrorLog(req, error)
         return res.status(500).send({
             message: "Error occurred, Please try again",
             error: error,

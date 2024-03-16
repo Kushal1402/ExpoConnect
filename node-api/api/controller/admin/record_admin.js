@@ -66,7 +66,6 @@ exports.getListing = async (req, res, next) => {
         });
     } catch (error) {
         console.log("Listing error", error);
-        helper.writeErrorLog(req, error)
         return res.status(500).send({
             message: "Error occurred, Please try again",
             error: error,

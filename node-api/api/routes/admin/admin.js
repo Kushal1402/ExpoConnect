@@ -2,16 +2,15 @@ const express = require("express");
 const router = express.Router();
 const AdminController = require("../../controller/admin/admin");
 const adminCheckAuth = require("../../middleware/admin-check-auth");
-const makeRequest = require("../../middleware/make-request");
 
-router.post("/addAdmin", adminCheckAuth, makeRequest, AdminController.createAdmin);
+router.post("/addAdmin", adminCheckAuth, AdminController.createAdmin);
 
-router.post("/login", makeRequest, AdminController.login);
+router.post("/login", AdminController.login);
 
-router.put("/updateProfile", adminCheckAuth, makeRequest, AdminController.editAdmin);
+router.put("/updateProfile", adminCheckAuth, AdminController.editAdmin);
 
-router.post("/changePassword", adminCheckAuth, makeRequest, AdminController.changePassword);
+router.post("/changePassword", adminCheckAuth, AdminController.changePassword);
 
-router.get("/auth", adminCheckAuth, makeRequest, AdminController.auth);
+router.get("/auth", adminCheckAuth, AdminController.auth);
 
 module.exports = router;
