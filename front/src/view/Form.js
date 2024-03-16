@@ -1,38 +1,89 @@
 import { Fragment, useState } from 'react';
 
 // mui import
-import { Divider, Grid, Stack, Typography, Card, Box, Button, TextField, Popper } from "@mui/material";
+import { Divider, Grid, Stack, Typography, Card, Box, Button, TextField, Popper, Snackbar, Alert } from "@mui/material";
 import MuiAutocomplete from "@mui/material/Autocomplete";
 
 // project imports
 import CountryCodeArr from "../helper/CountryCodeArr";
 import ButtonLoader from "../ui-component/ButtonLoader";
 import AuthWrapper1 from "../ui-component/FormWrapper";
+import { AddRecord } from '../actions/formApi';
 
 // third-party
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { v4 } from "uuid";
 
 const Form = () => {
 
     const [submitLoader, setSubmitLoader] = useState(false);
 
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState('');
+    const [errOpen, setErrOpen] = useState(false)
+    const [errMsg, setErrMsg] = useState("")
+
+    const validationSchema = Yup.object({
+        user_name: Yup.string().required("Name is required").max(52, "Name should be not more than 52 characters"),
+        company_name: Yup.string().required("Company name is required"),
+        position: Yup.string().max(52, "Position should be not more than 52 characters"),
+        contact_number: Yup.string().required("Phone number is required").min(5, "Phone number must min 5 characters").max(16, 'Phone number should be not more than 16 characters'),
+        country_code: Yup.mixed().when("contact_number", {
+            is: (value) => value?.length,
+            then: (schema) => schema.required("Country code is required"),
+            otherwise: (schema) => schema.nullable(),
+        }),
+        email: Yup.string().email('Email must be valid').required("Email is required"),
+    })
+
     const formik = useFormik({
         initialValues: {
             user_name: "",
             company_name: "",
-            postion: "",
+            position: "",
             country_code: "",
             contact_number: "",
             email: "",
         },
-        // validationSchema: {},
-        onSubmit: (values) => {
-            console.log(values, "values")
-            alert("Form submitted succesfully")
+        validationSchema,
+        onSubmit: (values, { resetForm }) => {
+
+            setSubmitLoader(true);
+
+            const data = {
+                user_name: values.user_name,
+                company_name: values.company_name,
+                position: values.position,
+                country_code: values.country_code,
+                contact_number: values.contact_number,
+                email: values.email,
+            };
+
+            AddRecord(data).then((res) => {
+                // console.log(res);
+                setOpen(true)
+                setMessage(res?.data?.message)
+                setSubmitLoader(false);
+                resetForm();
+            }).catch((err) => {
+                console.log("err", err);
+                setSubmitLoader(false);
+                setErrOpen(true)
+                setErrMsg(err?.response?.data?.message)
+            })
+
         },
     });
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpen(false)
+        setMessage("")
+        setErrOpen(false)
+        setErrMsg("")
+    }
 
     return (
         <Fragment>
@@ -140,6 +191,17 @@ const Form = () => {
                                                                 fullWidth
                                                                 size="small"
                                                             />
+                                                            {formik.touched.user_name &&
+                                                                formik.errors.user_name && (
+                                                                    <Typography
+                                                                        component="p"
+                                                                        variant="caption"
+                                                                        sx={{ color: "red" }}
+                                                                        className="invalid-text "
+                                                                    >
+                                                                        {formik.errors.user_name}
+                                                                    </Typography>
+                                                                )}
                                                         </Grid>
 
                                                         {/* Company Name */}
@@ -167,6 +229,17 @@ const Form = () => {
                                                                 fullWidth
                                                                 size="small"
                                                             />
+                                                            {formik.touched.company_name &&
+                                                                formik.errors.company_name && (
+                                                                    <Typography
+                                                                        component="p"
+                                                                        variant="caption"
+                                                                        sx={{ color: "red" }}
+                                                                        className="invalid-text "
+                                                                    >
+                                                                        {formik.errors.company_name}
+                                                                    </Typography>
+                                                                )}
                                                         </Grid>
 
                                                         {/* Position */}
@@ -194,6 +267,17 @@ const Form = () => {
                                                                 fullWidth
                                                                 size="small"
                                                             />
+                                                            {formik.touched.position &&
+                                                                formik.errors.position && (
+                                                                    <Typography
+                                                                        component="p"
+                                                                        variant="caption"
+                                                                        sx={{ color: "red" }}
+                                                                        className="invalid-text "
+                                                                    >
+                                                                        {formik.errors.position}
+                                                                    </Typography>
+                                                                )}
                                                         </Grid>
 
                                                         {/* Contact Number */}
@@ -246,6 +330,17 @@ const Form = () => {
                                                                     )}
                                                                     size='small'
                                                                 />
+                                                                {formik.touched.country_code &&
+                                                                    formik.errors.country_code && (
+                                                                        <Typography
+                                                                            component="p"
+                                                                            variant="caption"
+                                                                            sx={{ color: "red" }}
+                                                                            className="invalid-text "
+                                                                        >
+                                                                            {formik.errors.country_code}
+                                                                        </Typography>
+                                                                    )}
                                                             </Grid>
                                                             <Grid item xs={7} sx={{ mt: "3px" }}>
                                                                 <TextField
@@ -267,6 +362,17 @@ const Form = () => {
                                                                     fullWidth
                                                                     size='small'
                                                                 />
+                                                                {formik.touched.contact_number &&
+                                                                    formik.errors.contact_number && (
+                                                                        <Typography
+                                                                            component="p"
+                                                                            variant="caption"
+                                                                            sx={{ color: "red" }}
+                                                                            className="invalid-text "
+                                                                        >
+                                                                            {formik.errors.contact_number}
+                                                                        </Typography>
+                                                                    )}
                                                             </Grid>
                                                         </Grid>
 
@@ -295,6 +401,17 @@ const Form = () => {
                                                                 fullWidth
                                                                 size="small"
                                                             />
+                                                            {formik.touched.email &&
+                                                                formik.errors.email && (
+                                                                    <Typography
+                                                                        component="p"
+                                                                        variant="caption"
+                                                                        sx={{ color: "red" }}
+                                                                        className="invalid-text "
+                                                                    >
+                                                                        {formik.errors.email}
+                                                                    </Typography>
+                                                                )}
                                                         </Grid>
 
                                                     </Grid>
@@ -326,7 +443,19 @@ const Form = () => {
                 </Grid>
 
             </AuthWrapper1>
-        </Fragment >
+
+            <Snackbar open={open} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                <Alert autoHideDuration={4000} onClose={handleSnackbarClose} severity="success" variant="filled" >
+                    {message}
+                </Alert>
+            </Snackbar>
+
+            < Snackbar open={errOpen} autoHideDuration={4000} onClose={handleSnackbarClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                <Alert autoHideDuration={4000} onClose={handleSnackbarClose} severity="error" variant="filled" >
+                    {errMsg}
+                </Alert>
+            </Snackbar >
+        </Fragment>
     )
 }
 
