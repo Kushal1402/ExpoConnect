@@ -23,9 +23,9 @@ import "react-datepicker/dist/react-datepicker.css";
 // ==============================|| APP ||============================== //
 
 const App = () => {
-  // useEffect(() => {
-  //   store.dispatch(loadUser());
-  // }, [loadUser]);
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, [loadUser]);
   return (
     <ThemeCustomization store={store}>
       {/* RTL layout */}

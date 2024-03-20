@@ -20,7 +20,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
-import MuiAutocomplete from "@mui/material/Autocomplete";
 import { useTheme } from "@mui/material/styles";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -30,14 +29,6 @@ import { loadUser } from "store/slices/userLoginAction";
 import MainCard from "ui-component/cards/MainCard";
 import { checkEmptyValidation } from "Helpers/Validation";
 // import { getAdmin } from 'store/slices/allAdminAction';
-
-// import {
-//     checkRequiredValidationWithMinMax,
-//     checkEmailValidation,
-// } from "src/Helper/checkValid.js"
-
-import Cropper from "react-easy-crop";
-// import getCroppedImg from 'views/forms/raffle-category/cropImage';
 
 const BootstrapDialogTitle = ({ children, onClose, ...other }) => (
   <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -84,12 +75,12 @@ const UpdateProfile = (props) => {
   const [imagePreviewUrl, setUrl] = useState("");
   const [loader, setLoader] = useState(false);
 
-  // useEffect(() => {
-  //   setId(admin?._id);
-  //   setText(admin?.name);
-  //   setEmail(admin?.email);
-  //   setPreview(admin?.profile_picture);
-  // }, [admin?._id, admin?.name, admin?.email, admin?.profile_picture]);
+  useEffect(() => {
+    setId(admin?._id);
+    setText(admin?.adminName);
+    setEmail(admin?.email);
+    setPreview(admin?.profilePic);
+  }, [admin?._id, admin?.adminName, admin?.email, admin?.profilePic]);
 
   //Error states
   const [fileErr, setFileErr] = useState("");
@@ -168,62 +159,60 @@ const UpdateProfile = (props) => {
 
   const onSubmitForm = (e) => {
     e.preventDefault();
-    // setLoader(true);
-    // const pattern =
-    //   /^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*@[a-z0-9]+([a-z0-9]+)*(\.[a-z0-9]+([a-z0-9]+)*)*\.[a-z]{2,4}$/;
+    setLoader(true);
+    const pattern =
+      /^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*@[a-z0-9]+([a-z0-9]+)*(\.[a-z0-9]+([a-z0-9]+)*)*\.[a-z]{2,4}$/;
 
-    // let textErr = "";
-    // let emailErr = "";
+    let textErr = "";
+    let emailErr = "";
 
-    // textErr = checkEmptyValidation(text, "Name");
-    // emailErr = checkEmptyValidation(email, "Email");
+    textErr = checkEmptyValidation(text, "Name");
+    emailErr = checkEmptyValidation(email, "Email");
 
-    // if (textErr || emailErr) {
-    //   setError({
-    //     nameErr: textErr,
-    //     emailErr: emailErr,
-    //   });
-    // } else if (!pattern.test(email)) {
-    //   setError({
-    //     ...error,
-    //     emailErr: "Enter valid email",
-    //   });
-    // } else if (!imagePreview) {
-    //   setFileErr("Please select valid image");
-    // } else {
-    //   setError({
-    //     nameErr: "",
-    //     emailErr: "",
-    //   });
+    if (textErr || emailErr) {
+      setError({
+        nameErr: textErr,
+        emailErr: emailErr,
+      });
+    } else if (!pattern.test(email)) {
+      setError({
+        ...error,
+        emailErr: "Enter valid email",
+      });
+    } else if (!imagePreview) {
+      setFileErr("Please select valid image");
+    } else {
+      setError({
+        nameErr: "",
+        emailErr: "",
+      });
 
-    //   const formData = new FormData();
+      const formData = new FormData();
 
-    //   formData.append("name", text);
-    //   formData.append("email", email);
-    //   formData.append("profile_picture", imagePreviewUrl);
+      formData.append("name", text);
+      formData.append("email", email);
+      formData.append("profilePic", imagePreviewUrl);
 
-    //   setDisabledButton(true);
+      setDisabledButton(true);
 
-    //   props
-    //     .updateAdminProfileData(id, formData)
-    //     .then((res) => {
-    //       // props.getAdmin(id)
-    //       setLoader(false);
-    //       setDisabledButton(false);
-    //       setMessageOpen(true);
-    //       setMessage(res.data.message);
-    //       props.loadUser();
-    //       // navigate('/menu-category');
-    //       // props.close()
-    //     })
-    //     .catch((err) => {
-    //       setErrMessage(err?.response?.data?.message);
-    //       setErrMessageOpen(true);
-    //       setDisabledButton(false);
-    //       setLoader(false);
-    //       console.log(err, "error occured");
-    //     });
-    // }
+      props
+        .updateAdminProfileData(id, formData)
+        .then((res) => {
+          // props.getAdmin(id)
+          setLoader(false);
+          setDisabledButton(false);
+          setMessageOpen(true);
+          setMessage(res.data.message);
+          props.loadUser();
+        })
+        .catch((err) => {
+          setErrMessage(err?.response?.data?.message);
+          setErrMessageOpen(true);
+          setDisabledButton(false);
+          setLoader(false);
+          console.log(err, "error occured");
+        });
+    }
   };
 
   return (
@@ -374,60 +363,32 @@ const UpdateProfile = (props) => {
           )}{" "}
         </Grid>
 
-        {disabledButton === true ? (
-          <Button
-            size="smaill"
-            type="submit"
-            variant="contained"
-            // color='secondary'
-            sx={{
-              background: "#2196F3",
-              display: "flex",
-              justifyContent: "center",
-              mt: 2,
-            }}
-            disabled
-            onClick={(e) => {
-              onSubmitForm(e);
-            }}
-          >
-            {loader ? (
-              <CircularProgress
-                variant="indeterminate"
-                color="inherit"
-                size={24}
-              />
-            ) : (
-              "Save"
-            )}
-          </Button>
-        ) : (
-          <Button
-            size="smaill"
-            type="submit"
-            variant="contained"
-            // color='secondary'
-            sx={{
-              background: "#2196F3",
-              display: "flex",
-              justifyContent: "center",
-              mt: 2,
-            }}
-            onClick={(e) => {
-              onSubmitForm(e);
-            }}
-          >
-            {loader ? (
-              <CircularProgress
-                variant="indeterminate"
-                color="inherit"
-                size={24}
-              />
-            ) : (
-              "Save"
-            )}
-          </Button>
-        )}
+        <Button
+          size="smaill"
+          type="submit"
+          variant="contained"
+          // color='secondary'
+          sx={{
+            background: "#2196F3",
+            display: "flex",
+            justifyContent: "center",
+            mt: 2,
+          }}
+          onClick={(e) => {
+            onSubmitForm(e);
+          }}
+          disabled={disabledButton === true ? true : false}
+        >
+          {loader ? (
+            <CircularProgress
+              variant="indeterminate"
+              color="inherit"
+              size={24}
+            />
+          ) : (
+            "Save"
+          )}
+        </Button>
       </MainCard>
     </>
   );

@@ -15,8 +15,8 @@ import {
   // Alert
 } from "@mui/material";
 
-import { Navigate, useNavigate } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
 
 import { login } from "../../../../store/slices/userLoginAction";
 import {
@@ -46,63 +46,47 @@ const LoginAuth = (props) => {
   const dispatch = useDispatch();
   const theme = useTheme();
 
-  const [checked, setChecked] = React.useState(true);
-  const [loginLoading, setLoginLoading] = React.useState(true);
   const [showPassword, setShowPassword] = React.useState(false);
-  const [showLoginError, setShowLoginError] = React.useState("");
 
   const [disabledButton, setDisabledButton] = useState(false);
 
   const [loader, setLoader] = useState("");
 
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const auth = useSelector((state) => state.auth);
-  const { isAuthenticated, loading } = auth;
-
   const initialValues = {
-    email: "admin@gmail.com",
-    password: "123456",
+    email: "",
+    password: "",
   };
 
   const onSubmit = (values) => {
-    // setLoginLoading(true);
-    // let newData = {
-    //   email: values.email,
-    //   password: values.password,
-    // };
-    // setLoader(true);
-    // setDisabledButton(true);
-    // props
-    //   .login(newData)
-    //   .then((res) => {
-    //     setDisabledButton(false);
-    //     // console.log(res, 'inside .then')
-    //     setLoginLoading(false);
-    //     setLoader(false);
-    //     // setOpen(true)
-    //     // setMessage(res)
-    navigate("/records", { replace: true });
-    //   })
-    //   .catch((err) => {
-    //     setDisabledButton(false);
-    //     // setShowLoginError(err.data.message)
-    //     console.log(err, "err.response");
-    //     // setOpen(true)
-    //     dispatch(
-    //       openSnackbar({
-    //         open: true,
-    //         message: err.response.data.message,
-    //         variant: "alert",
-    //         alert: {
-    //           color: "error",
-    //         },
-    //         transition: "Fade",
-    //         anchorOrigin: { vertical: "top", horizontal: "right" },
-    //       })
-    //     );
-    //   });
+    let newData = {
+      email: values.email,
+      password: values.password,
+    };
+    setLoader(true);
+    setDisabledButton(true);
+    props
+      .login(newData)
+      .then((res) => {
+        setDisabledButton(false);
+        setLoader(false);
+        navigate("/records", { replace: true });
+      })
+      .catch((err) => {
+        setDisabledButton(false);
+        console.log(err, "err.response");
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: err.response.data.message,
+            variant: "alert",
+            alert: {
+              color: "error",
+            },
+            transition: "Fade",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          })
+        );
+      });
   };
 
   const validationSchema = Yup.object({
@@ -129,29 +113,8 @@ const LoginAuth = (props) => {
     event.preventDefault();
   };
 
-  // if (isAuthenticated === true && loading === false) {
-  //   return <Navigate replace to="/users" />;
-  // }
-
-  //snackbar close
-  // const handleClose = (event, reason) => {
-  //   if (reason === "clickaway") {
-  //     return;
-  //   }
-  //   setOpen(false)
-  // }
-
-  // console.log(message, 'message')
-  // console.log(open, 'open')
   return (
     <>
-      {/* {open === true ?
-        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-          <Alert autoHideDuration={4000} onClose={handleClose} severity="error" variant="filled">
-            {message}
-          </Alert>
-        </Snackbar> : ""} */}
-
       <Grid container direction="column" justifyContent="center" spacing={2}>
         <Grid
           item
@@ -245,50 +208,27 @@ const LoginAuth = (props) => {
 
           <Box sx={{ mt: 2 }}>
             <AnimateButton>
-              {disabledButton === true ? (
-                <Button
-                  // disableElevation
-                  // disabled={isSubmitting}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  // color="secondary"
-                  sx={{ background: "#2196f3" }}
-                  disabled
-                >
-                  {loader ? (
-                    <CircularProgress
-                      color="inherit"
-                      variant="indeterminate"
-                      size={26}
-                    />
-                  ) : (
-                    "Login"
-                  )}
-                </Button>
-              ) : (
-                <Button
-                  // disableElevation
-                  // disabled={isSubmitting}
-                  fullWidth
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  // color="secondary"
-                  sx={{ background: "#2196f3" }}
-                >
-                  {loader ? (
-                    <CircularProgress
-                      color="inherit"
-                      variant="indeterminate"
-                      size={26}
-                    />
-                  ) : (
-                    "Login"
-                  )}
-                </Button>
-              )}
+              <Button
+                // disableElevation
+                // disabled={isSubmitting}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+                // color="secondary"
+                sx={{ background: "#2196f3" }}
+                disable={disabledButton === true ? true : false}
+              >
+                {loader ? (
+                  <CircularProgress
+                    color="inherit"
+                    variant="indeterminate"
+                    size={26}
+                  />
+                ) : (
+                  "Login"
+                )}
+              </Button>
             </AnimateButton>
           </Box>
         </form>

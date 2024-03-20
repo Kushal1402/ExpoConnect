@@ -10,6 +10,7 @@ import accountReducer from "./accountReducer";
 import userReducer from "./userReducer";
 import alertReducer from "./alertReducer";
 import subscriberReducer from "./subscriberReducer";
+import recordReducer from "./recordReducer"
 // ==============================|| COMBINE REDUCER ||============================== //
 
 const reducer = combineReducers({
@@ -27,6 +28,7 @@ const reducer = combineReducers({
   menu: menuReducer,
   alert: alertReducer,
   subscriber: subscriberReducer,
+  record: recordReducer,
 });
 
 export default reducer;

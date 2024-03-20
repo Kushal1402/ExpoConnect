@@ -94,46 +94,46 @@ const ChangeAdminPassword = (props) => {
 
   const onSubmit = (values) => {
 
-    // setLoader(true);
-    // let newData = {
-    //   old_password: values.old_password,
-    //   new_password: values.confirm_password,
-    // };
-    // setDisabledButton(true);
-    // props
-    //   .changeAdminPassword(newData, admin?._id)
-    //   .then((res) => {
-    //     setDisabledButton(false);
-    //     setLoader(false);
-    //     dispatch(
-    //       openSnackbar({
-    //         open: true,
-    //         message: res?.data?.message,
-    //         variant: "alert",
-    //         alert: {
-    //           color: "success",
-    //         },
-    //         transition: "Fade",
-    //         anchorOrigin: { vertical: "top", horizontal: "right" },
-    //       })
-    //     );
-    //   })
-    //   .catch((err) => {
-    //     setDisabledButton(false);
-    //     setLoader(false);
-    //     dispatch(
-    //       openSnackbar({
-    //         open: true,
-    //         message: err?.response?.data?.message,
-    //         variant: "alert",
-    //         alert: {
-    //           color: "error",
-    //         },
-    //         transition: "Fade",
-    //         anchorOrigin: { vertical: "top", horizontal: "right" },
-    //       })
-    //     );
-    //   });
+    setLoader(true);
+    let newData = {
+      old_password: values.old_password,
+      new_password: values.confirm_password,
+    };
+    setDisabledButton(true);
+    props
+      .changeAdminPassword(newData, admin?._id)
+      .then((res) => {
+        setDisabledButton(false);
+        setLoader(false);
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: res?.data?.message,
+            variant: "alert",
+            alert: {
+              color: "success",
+            },
+            transition: "Fade",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          })
+        );
+      })
+      .catch((err) => {
+        setDisabledButton(false);
+        setLoader(false);
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: err?.response?.data?.message,
+            variant: "alert",
+            alert: {
+              color: "error",
+            },
+            transition: "Fade",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          })
+        );
+      });
   };
 
   const formik = useFormik({
@@ -302,60 +302,32 @@ const ChangeAdminPassword = (props) => {
             )}
           </FormControl>
 
-          {disabledButton === true ? (
-            <Button
-              // disableElevation
-              // disabled={isSubmitting}
-              // fullWidth
-              size="smaill"
-              type="submit"
-              variant="contained"
-              // color="secondary"
-              sx={{
-                background: "#2196F3",
-                display: "flex",
-                justifyContent: "center",
-                mt: 2,
-              }}
-              disabled
-            >
-              {loader ? (
-                <CircularProgress
-                  variant="indeterminate"
-                  color="inherit"
-                  size={24}
-                />
-              ) : (
-                "Save"
-              )}
-            </Button>
-          ) : (
-            <Button
-              // disableElevation
-              // disabled={isSubmitting}
-              // fullWidth
-              size="smaill"
-              type="submit"
-              variant="contained"
-              // color="secondary"
-              sx={{
-                background: "#2196F3",
-                display: "flex",
-                justifyContent: "center",
-                mt: 2,
-              }}
-            >
-              {loader ? (
-                <CircularProgress
-                  variant="indeterminate"
-                  color="inherit"
-                  size={24}
-                />
-              ) : (
-                "Save"
-              )}
-            </Button>
-          )}
+          <Button
+            // disableElevation
+            // disabled={isSubmitting}
+            // fullWidth
+            size="smaill"
+            type="submit"
+            variant="contained"
+            // color="secondary"
+            sx={{
+              background: "#2196F3",
+              display: "flex",
+              justifyContent: "center",
+              mt: 2,
+            }}
+            disabled={disabledButton === true ? true : false}
+          >
+            {loader ? (
+              <CircularProgress
+                variant="indeterminate"
+                color="inherit"
+                size={24}
+              />
+            ) : (
+              "Save"
+            )}
+          </Button>
         </form>
       </Formik>
     </MainCard>

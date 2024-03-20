@@ -43,11 +43,7 @@ const ProfileSection = (props) => {
 
   const auth = useSelector((state) => state.auth);
   const { admin, loading } = auth;
-  // console.log(auth, "admin");
 
-  const [sdm, setSdm] = useState(true);
-  const [value, setValue] = useState("");
-  const [notification, setNotification] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const { logout, user } = useAuth();
   const [open, setOpen] = useState(false);
@@ -135,7 +131,7 @@ const ProfileSection = (props) => {
         }}
         icon={
           <Avatar
-            src={admin?.profile_picture}
+            src={admin?.profilePic}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: "8px 0 8px 8px !important",

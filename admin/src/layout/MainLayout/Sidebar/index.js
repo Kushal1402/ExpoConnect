@@ -26,15 +26,6 @@ const Sidebar = ({ window }) => {
     const dispatch = useDispatch();
     const { drawerOpen } = useSelector((state) => state.menu);
 
-    const [Role, setRole] = useState("");
-
-    useEffect(() => {
-        const role = localStorage.getItem("role");
-        if (role !== null) {
-            setRole(role);
-        }
-    }, [Role]);
-
     const logo = useMemo(
         () => (
             <Box sx={{ display: { xs: 'block', md: 'none' } }}>

@@ -18,14 +18,12 @@ const config = {
 };
 
 const PROXY = process.env.REACT_APP_URL;
-// let role = localStorage.getItem("role");
 export const login = (userObj) => async (dispatch) => {
   try {
     const body = JSON.stringify(userObj);
 
     const res = await axios.post(PROXY + "admin/login", body, config);
     console.log(res);
-    // localStorage.setItem('role', res.data.Admin[0].role);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
@@ -47,8 +45,8 @@ export const login = (userObj) => async (dispatch) => {
 
 // Load User
 export const loadUser = (data) => async (dispatch) => {
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
+  if (localStorage.exhibition_admin_token) {
+    setAuthToken(localStorage.exhibition_admin_token);
   }
   try {
     const body = JSON.stringify(data);
@@ -74,12 +72,12 @@ export const logout = () => async (dispatch) => {
 
 export const changeAdminPassword = (data, id) => async (dispatch) => {
   const body = JSON.stringify(data);
-  const res = await axios.put(`${PROXY}admin/change_password`, body, config);
+  const res = await axios.post(`${PROXY}admin/changePassword`, body, config);
   return res;
 };
 
 export const updateAdminProfileData = (id, formData) => async (dispatch) => {
-  const res = await axios.put(`${PROXY}admin/updateAdmin`, formData, config);
+  const res = await axios.put(`${PROXY}admin/updateProfile`, formData, config);
   return res;
 };
 
