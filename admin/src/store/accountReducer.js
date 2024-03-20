@@ -10,7 +10,7 @@ import {
 // ==============================|| ACCOUNT REDUCER ||============================== //
 
 const initialState = {
-  token: localStorage.getItem("token"),
+  token: localStorage.getItem("exhibition_admin_token"),
   isAuthenticated: false,
   loading: true,
   admin: {},
@@ -21,7 +21,7 @@ export default function accountReducer(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
     case LOGIN_SUCCESS:
-      localStorage.setItem("token", payload.token);
+      localStorage.setItem("exhibition_admin_token", payload.token);
       return {
         ...state,
         ...payload,
@@ -29,7 +29,6 @@ export default function accountReducer(state = initialState, action) {
         loading: false,
       };
     case LOGIN_SUB_ADMIN_SUCCESS:
-      localStorage.setItem("role", payload.role);
       return {
         ...state,
         isAuthenticated: true,
@@ -37,7 +36,6 @@ export default function accountReducer(state = initialState, action) {
         admin: payload,
       };
     case ADMIN_LOADED:
-      localStorage.setItem("role", payload.role);
 
       return {
         ...state,
@@ -46,8 +44,7 @@ export default function accountReducer(state = initialState, action) {
         admin: payload,
       };
     case LOGOUT_SUCCESS:
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
+      localStorage.removeItem("exhibition_admin_token");
       return {
         ...state,
         token: null,
@@ -55,7 +52,7 @@ export default function accountReducer(state = initialState, action) {
         loading: false,
       };
     case AUTH_FAIL:
-      localStorage.removeItem("token");
+      localStorage.removeItem("exhibition_admin_token");
       return {
         ...state,
         token: null,
