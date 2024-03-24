@@ -22,7 +22,6 @@ exports.getListing = async (req, res, next) => {
     let matchObj = {};
 
     if (search) {
-        console.log("search:", search)
         matchObj.$or = [
             { user_name: { $regex: search, $options: "i" } },
             { company_name: { $regex: search, $options: "i" } },

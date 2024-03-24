@@ -89,7 +89,7 @@ const MainLayout = () => {
 
   const header = useMemo(
     () => (
-      <Toolbar sx={{ py: "4px" }}>
+      <Toolbar sx={{ py: "4px", pl: { sm: "18px", md: "8px" } }}>
         <Header />
       </Toolbar>
     ),
@@ -108,6 +108,8 @@ const MainLayout = () => {
         sx={{
           bgcolor: theme.palette.background.default,
           transition: drawerOpen ? theme.transitions.create("width") : "none",
+          height: "67.5px !important",
+          justifyContent: "flex-end"
         }}
       >
         {header}

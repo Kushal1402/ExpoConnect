@@ -95,15 +95,15 @@ const NavItem = ({ item, level }) => {
         borderRadius: `${borderRadius}px`,
         mb: 0.5,
         alignItems: "flex-start",
-        backgroundColor: level > 1 ? "transparent !important" : "inherit",
+        backgroundColor: "#025DBF !important",
         "&:hover": {
-          color: "#00AEEF !important",
+          color: "#ffffff !important",
         },
         "&:hover .MuiListItemIcon-root": {
-          color: "#00AEEF !important",
+          color: "#ffffff !important",
         },
         "&.Mui-selected .MuiListItemIcon-root": {
-          color: "#00AEEF !important",
+          color: "#ffffff !important",
         },
         py: level > 1 ? 1 : 1.25,
         pl: `${level * 24}px`,
@@ -115,15 +115,15 @@ const NavItem = ({ item, level }) => {
         sx={{
           my: "auto",
           minWidth: !item?.icon ? 18 : 36,
-          color: "dimgray !important",
+          color: "#ffffff !important",
           "&:hover": {
-            color: "#00AEEF !important",
+            color: "#ffffff !important",
           },
           "&:hover .MuiListItemIcon-root": {
-            color: "#00AEEF !important",
+            color: "#ffffff !important",
           },
           "&.Mui-selected .MuiListItemIcon-root": {
-            color: "#00AEEF !important",
+            color: "#ffffff !important",
           },
         }}
       >
@@ -132,19 +132,9 @@ const NavItem = ({ item, level }) => {
       <ListItemText
         primary={
           <Typography
-            variant={
-              openItem?.findIndex((id) => id === item.id) > -1 ? "h5" : "body1"
-            }
+            variant={openItem?.findIndex((id) => id === item.id) > -1 ? "h5" : "body1"}
             // color="dimgray !important"
-            sx={{
-              "&.Mui-selected .MuiListItemIcon-root": {
-                color: "#00AEEF !important",
-              },
-            }}
-            onClick={(e) => {
-              localStorage.removeItem("setPath");
-              localStorage.setItem("currentPage", 1);
-            }}
+            sx={{ color: "#ffffff !important", }}
           >
             {item.title}
           </Typography>

@@ -23,7 +23,6 @@ export const login = (userObj) => async (dispatch) => {
     const body = JSON.stringify(userObj);
 
     const res = await axios.post(PROXY + "admin/login", body, config);
-    console.log(res);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
@@ -68,6 +67,18 @@ export const logout = () => async (dispatch) => {
   dispatch({
     type: LOGOUT_SUCCESS,
   });
+  dispatch(
+    openSnackbar({
+      open: true,
+      message: "Logout Successfully",
+      variant: "alert",
+      alert: {
+        color: "success",
+      },
+      transition: "Fade",
+      anchorOrigin: { vertical: "top", horizontal: "right" },
+    })
+  );
 };
 
 export const changeAdminPassword = (data, id) => async (dispatch) => {

@@ -128,7 +128,7 @@ const LoginAuth = (props) => {
             <Typography variant="subtitle1">Log in to your account</Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} display="flex" justifyContent="center">
+        <Grid item xs={12} display="flex" justifyContent="center" sx={{ paddingTop: "0px !important" }}>
           <Alert />
         </Grid>
       </Grid>
@@ -209,14 +209,11 @@ const LoginAuth = (props) => {
           <Box sx={{ mt: 2 }}>
             <AnimateButton>
               <Button
-                // disableElevation
-                // disabled={isSubmitting}
                 fullWidth
                 size="large"
                 type="submit"
                 variant="contained"
-                // color="secondary"
-                sx={{ background: "#2196f3" }}
+                sx={{ background: "#025DBF", "&:hover": { background: "#025DBF" } }}
                 disable={disabledButton === true ? true : false}
               >
                 {loader ? (

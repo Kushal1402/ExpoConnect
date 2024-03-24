@@ -1,6 +1,6 @@
 // material-ui
 import { useTheme } from "@mui/material/styles";
-import logo from "assets/images/logo.svg";
+import logo from "assets/images/ExpoConnect.svg";
 
 // ==============================|| LOGO SVG ||============================== //
 
@@ -11,7 +11,7 @@ const Logo = () => {
     <img
       src={theme.palette.mode === "dark" ? logo : logo}
       alt="App Logo"
-      width="80px"
+      width="175px"
       style={{ marginTop: '3px' }}
     />
   );

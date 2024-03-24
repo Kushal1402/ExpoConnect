@@ -98,14 +98,11 @@ const ProfileSection = (props) => {
           borderRadius: "27px",
           transition: "all .2s ease-in-out",
           borderColor: "#e3f2fd",
-          backgroundColor:
-            theme.palette.mode === "dark"
-              ? theme.palette.dark.main
-              : theme.palette.primary.light,
-          background: "#DEF5FD",
+          backgroundColor: theme.palette.mode === "dark" ? theme.palette.dark.main : theme.palette.primary.light,
+          background: "#025DBF",
           color: "#fff !important",
           "&:hover": {
-            background: "#00AEEF !important",
+            background: "#025DBF !important",
             color: "#fff !important",
           },
           "&:hover .MuiListItemIcon-root": {
@@ -114,17 +111,6 @@ const ProfileSection = (props) => {
           "&.Mui-selected .MuiListItemIcon-root": {
             color: "#fff !important",
           },
-          // background: "#e3f2fd",
-          // color: "#ffffff",
-          // '&[aria-controls="menu-list-grow"], &:hover': {
-          //   // borderColor: theme.palette.secondary.main,
-          //   // background: `${theme.palette.primary.main}!important`,
-          //   color: "#ffffff !important",
-          //   background: "#2196f3",
-          //   // "& svg": {
-          //   //   stroke: theme.palette.primary.light,
-          //   // },
-          // },
           "& .MuiChip-label": {
             lineHeight: 0,
           },

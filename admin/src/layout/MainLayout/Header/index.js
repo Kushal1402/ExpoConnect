@@ -45,10 +45,10 @@ const Header = () => {
             ...theme.typography.mediumAvatar,
             overflow: "hidden",
             transition: "all .2s ease-in-out",
-            background: "#DEF5FD",
-            color: "#00AEEF !important",
+            background: "#025DBF",
+            color: "#fff !important",
             "&:hover": {
-              background: "#00AEEF  !important",
+              background: "#025DBF  !important",
               color: "#fff !important",
             },
           }}

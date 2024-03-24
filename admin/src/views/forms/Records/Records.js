@@ -27,6 +27,7 @@ import { IconSearch } from "@tabler/icons";
 import ClearIcon from "@mui/icons-material/Clear";
 
 // project imports
+import useRecursiveTimeout from "Helpers/useRecursiveTimeout";
 import MainCard from "ui-component/cards/MainCard";
 import { getRecords } from "../../../store/slices/recordAction";
 
@@ -60,13 +61,14 @@ const Records = (props) => {
     props.getRecords(1, 10, "");
   }, [props])
 
+  useRecursiveTimeout(async () => {
+    if (search === "") {
+      props.getRecords(page, 10, "");
+    }
+  }, 60000);
+
   const record = useSelector((state) => state.record);
   const { records, loading } = record;
-
-  const handleClearSearch = () => {
-    setSearch("");
-    props.getRecords(1, 10, "");
-  };
 
   // table header
   const headCells = [
@@ -121,14 +123,7 @@ const Records = (props) => {
   function EnhancedTableHead({
     order,
     orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
   }) {
-    const createSortHandler = (property) => (event) => {
-      onRequestSort(event, property);
-    };
-
     return (
       <TableHead>
         <TableRow>
@@ -154,38 +149,40 @@ const Records = (props) => {
   }
 
   EnhancedTableHead.propTypes = {
-    // numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    // onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(["asc", "desc"]).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
   };
 
-  // ==============================|| Status Change ||============================== //
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  const handleSearch = async (event) => {
+  // ==============================|| Search ||============================== //
+  const handleSearch = (event) => {
     const newString = event?.target.value;
     setSearch(newString);
-  };
-
-  const onFieldKeyPress = (e) => {
-    if (e.target.name === "search") {
-      if (e.key === "Enter") {
-        props.getRecords(1, 10, e.target.value.replace(/\s+/g, ''));
-      }
+    if (event.target.name === "search" && event.target.value !== "") {
+      props.getRecords(1, 10, event.target.value.replace(/\s+/g, ''));
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Backspace" && search.length === 1) {
+      props.getRecords(1, 10, '');
+    }
+  }
+
+  const handleClearSearch = () => {
+    setSearch("");
+    props.getRecords(1, 10, "");
+  };
+
+  // ==============================|| Pagination ||============================== //
   const paginationHandle = async (e, p) => {
-    console.log("🚀 ~ paginationHandle ~ p:", p)
-    // console.log(p, "p")
-    // console.log("Page", Page)
     setPage(p)
     await props.getRecords(p, 10, search);
   }
@@ -207,7 +204,7 @@ const Records = (props) => {
               label={"Search"}
               value={search}
               fullWidth
-              onKeyPress={(e) => onFieldKeyPress(e)}
+              onKeyDown={handleKeyDown}
               onChange={handleSearch}
               startAdornment={
                 <InputAdornment position="start">
@@ -289,7 +286,12 @@ const Records = (props) => {
                 <Pagination
                   align="right"
                   count={records.totalPages}
-                  color="primary"
+                  sx={{
+                    "& .Mui-selected": {
+                      color: "#ffffff !important",
+                      background: `#025DBF !important`,
+                    }
+                  }}
                   page={page}
                   onChange={paginationHandle}
                 />

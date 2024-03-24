@@ -12,7 +12,7 @@ const recordsSchema = mongoose.Schema(
             type: String,
             default: "",
         },
-        postion: {
+        position: {
             type: String,
             default: "",
         },
@@ -29,6 +29,9 @@ const recordsSchema = mongoose.Schema(
             unique: true,
             required: true,
         },
+    },
+    {
+        timestamps: true,
     }
 );
 

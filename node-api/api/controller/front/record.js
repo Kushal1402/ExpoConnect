@@ -1,6 +1,7 @@
 const RecordsModel = require("../../models/records");
 const helper = require("../../helper/helper");
 const niv = require("node-input-validator");
+const sendEmail = require('../../helper/email');
 
 exports.add = async (req, res, next) => {
     const objValidation = new niv.Validator(req.body, {
@@ -40,6 +41,9 @@ exports.add = async (req, res, next) => {
 
         let result = new RecordsModel(createObj);
         result = await result.save();
+
+        const subject = `ExpoConnect Company Profile`;
+        await sendEmail.SendMail(email, subject, createObj);
 
         return res.status(200).send({
             message: "Your data has been successfully submitted",

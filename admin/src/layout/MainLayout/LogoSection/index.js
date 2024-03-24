@@ -11,11 +11,11 @@ import { Grid } from "@mui/material";
 // ==============================|| MAIN LOGO ||============================== //
 
 const LogoSection = () => (
-    // <Link component={RouterLink} to={DASHBOARD_PATH}>
-    <Grid item sx={{ textAlign: 'center' }}>
-        <Logo />
-    </Grid>
-    // </Link>
+    <Link component={RouterLink} to={DASHBOARD_PATH}>
+        <Grid item sx={{ textAlign: 'center' }}>
+            <Logo />
+        </Grid>
+    </Link>
 );
 
 export default LogoSection;

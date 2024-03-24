@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 // ==============================|| AUTHENTICATION 1 WRAPPER ||============================== //
 
 const FormWrapper = styled('div')(({ theme }) => ({
-    backgroundColor: 'rgb(227, 242, 253)',
+    backgroundColor: '#FFFFFF',
     minHeight: '100vh'
 }));
 

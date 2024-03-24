@@ -41,7 +41,7 @@ const Login = () => {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <Grid item sx={{ mb: 1 }}>
+                  <Grid item sx={{ mb: 3 }}>
                     <Logo />
                   </Grid>
                   <Grid item xs={12} sx={{ pt: "4px !important" }}>
@@ -60,7 +60,6 @@ const Login = () => {
                           <Typography
                             // color={theme.palette.secondary.main}
                             color="#212121"
-                            gutterBottom
                             variant={matchDownSM ? "h3" : "h2"}
                           >
                             Hi, Welcome Back

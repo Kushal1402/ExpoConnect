@@ -192,13 +192,13 @@ exports.editAdmin = async (req, res) => {
 
     const { name, email, password } = req.body;
     try {
-        const updateObj = {};        
+        const updateObj = {};
         if (name) updateObj.adminName = name;
         if (password) updateObj.password = await bcrypt.hash(password, 10);
         // if (email) updateObj.email = email;
         if (email) {
             const adminEmailResult = await AdminModel.findOne({
-                _id: { $ne: mongoose.Types.ObjectId(id) },
+                _id: { $ne: new mongoose.Types.ObjectId(id) },
                 email: req.body.email,
                 status: {
                     $in: [1, 2],
@@ -233,6 +233,7 @@ exports.editAdmin = async (req, res) => {
             result: result,
         });
     } catch (err) {
+        console.log("editAdmin ~ err:", err)
         return res.status(500).json({
             message: "Error occurred, Please try again later",
             error: err,
