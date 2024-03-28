@@ -45,7 +45,6 @@ const ChangeAdminPassword = (props) => {
     old_password: "",
     new_password: "",
     confirm_password: "",
-    // passID:id,
   };
 
   const validate = (values) => {
@@ -54,39 +53,30 @@ const ChangeAdminPassword = (props) => {
     if (!values.old_password) {
       errors.old_password = "This field is required";
     } else if (values.old_password.length < 6) {
-      errors.old_password = "Old passsword must be greater then 6 characters";
+      errors.old_password = "Current passsword must be greater than 6 characters";
     } else if (values.old_password.length > 25) {
-      errors.old_password =
-        "Old passsword field must be less then 25 characters";
+      errors.old_password = "Current passsword must be less then 25 characters";
     }
 
     if (!values.new_password) {
       errors.new_password = "This field is required";
     } else if (values.new_password.length < 6) {
-      errors.new_password = "New Password Field Should Be More Than 6 Digit";
+      errors.new_password = "New password must be greater than 6 characters";
     } else if (values.new_password.length > 25) {
-      errors.new_password =
-        "Old passsword field must be less then 25 characters";
+      errors.new_password = "New passsword must be less then 25 characters";
     }
 
     if (!values.confirm_password) {
       errors.confirm_password = "This field is required";
     } else if (values.confirm_password.length < 6) {
-      errors.confirm_password =
-        "Confirm Password Field Should Be More Than 6 Digit";
+      errors.confirm_password = "Confirm password must be greater than 6 characters";
     } else if (values.confirm_password.length > 25) {
-      errors.confirm_password =
-        "Old passsword field must be less then 25 characters";
+      errors.confirm_password = "Confirm passsword field must be less then 25 characters";
     } else if (values.new_password !== values.confirm_password) {
-      errors.confirm_password =
-        "Confirm password should be same as new password";
-    } else if (
-      values.new_password.length < 6 &&
-      values.confirm_password.length < 6
-    ) {
-      errors.new_password = "New Password Field Should Be More Than 6 Digit";
-      errors.confirm_password =
-        "Confirm Password Field Should Be More Than 6 Digit";
+      errors.confirm_password = "Confirm password should be same as new password";
+    } else if (values.new_password.length < 6 && values.confirm_password.length < 6) {
+      errors.new_password = "New password must be greater than 6 characters";
+      errors.confirm_password = "Confirm password must be greater than 6 characters";
     }
 
     return errors;
@@ -168,7 +158,7 @@ const ChangeAdminPassword = (props) => {
             sx={{ ...theme.typography.customInput }}
           >
             <InputLabel htmlFor="outlined-adornment-password-login">
-              Old Password
+              Old Password <span style={{ color: "red" }}>*</span>
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password-login"
@@ -178,11 +168,6 @@ const ChangeAdminPassword = (props) => {
               label="Old Password"
               onChange={formik.handleChange}
               value={formik.values.old_password}
-              // error={
-              //     formik.touched.old_password &&
-              //     Boolean(formik.errors.old_password)
-              // }
-              // onBlur={formik.handleBlur}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -216,7 +201,7 @@ const ChangeAdminPassword = (props) => {
             sx={{ ...theme.typography.customInput }}
           >
             <InputLabel htmlFor="outlined-adornment-password-login">
-              New Password
+              New Password <span style={{ color: "red" }}>*</span>
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password-login"
@@ -263,7 +248,7 @@ const ChangeAdminPassword = (props) => {
             sx={{ ...theme.typography.customInput }}
           >
             <InputLabel htmlFor="outlined-adornment-password-login">
-              Confirm Password
+              Confirm Password <span style={{ color: "red" }}>*</span>
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password-login"
@@ -303,15 +288,12 @@ const ChangeAdminPassword = (props) => {
           </FormControl>
 
           <Button
-            // disableElevation
-            // disabled={isSubmitting}
-            // fullWidth
             size="smaill"
             type="submit"
             variant="contained"
-            // color="secondary"
             sx={{
-              background: "#2196F3",
+              background: "#025DBF",
+              "&:hover": { background: "#025DBF" },
               display: "flex",
               justifyContent: "center",
               mt: 2,

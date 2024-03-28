@@ -1,8 +1,7 @@
 // action - state management
 import {
   ADMIN_LOADED,
-  AUTH_FAIL,
-  LOGIN_SUB_ADMIN_SUCCESS,
+  AUTH_FAIL, 
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
 } from "./actions";
@@ -27,16 +26,8 @@ export default function accountReducer(state = initialState, action) {
         ...payload,
         isAuthenticated: true,
         loading: false,
-      };
-    case LOGIN_SUB_ADMIN_SUCCESS:
-      return {
-        ...state,
-        isAuthenticated: true,
-        loading: false,
-        admin: payload,
-      };
+      };    
     case ADMIN_LOADED:
-
       return {
         ...state,
         isAuthenticated: true,
@@ -50,6 +41,7 @@ export default function accountReducer(state = initialState, action) {
         token: null,
         isAuthenticated: false,
         loading: false,
+        admin: {}
       };
     case AUTH_FAIL:
       localStorage.removeItem("exhibition_admin_token");

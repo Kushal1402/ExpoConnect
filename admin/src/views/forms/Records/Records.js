@@ -252,7 +252,7 @@ const Records = (props) => {
               <TableBody>
                 {loading === false && records?.docs?.length > 0 ?
                   records?.docs?.map((row, i) => (
-                    <TableRow tabIndex={-1} key={i}>
+                    <TableRow hover tabIndex={-1} key={i}>
                       <TableCell align="left">{row.user_name ? row.user_name : "-"}</TableCell>
                       <TableCell align="left">{row.company_name ? row.company_name : '-'}</TableCell>
                       <TableCell align="left">{row.position ? row.position : '-'}</TableCell>
@@ -279,24 +279,23 @@ const Records = (props) => {
 
         </Paper>
 
-        <Grid item xs={12} sx={{ p: 3 }}>
-          <Grid container justifyContent="space-between" spacing={2}>
-            <Grid item>
-              {!loading && (
-                <Pagination
-                  align="right"
-                  count={records.totalPages}
-                  sx={{
-                    "& .Mui-selected": {
-                      color: "#ffffff !important",
-                      background: `#025DBF !important`,
-                    }
-                  }}
-                  page={page}
-                  onChange={paginationHandle}
-                />
-              )}
-            </Grid>
+        <Grid container>
+          <Grid item xs={12} sx={{ py: 2 }}>
+            {!loading && (
+              <Pagination
+                count={records.totalPages}
+                page={page}
+                align="right"
+                onChange={paginationHandle}
+                sx={{
+                  float: "right",
+                  "& .Mui-selected": {
+                    color: "#ffffff !important",
+                    background: `#025DBF !important`,
+                  }
+                }}
+              />
+            )}
           </Grid>
         </Grid>
 

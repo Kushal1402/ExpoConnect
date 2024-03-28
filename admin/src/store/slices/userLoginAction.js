@@ -5,7 +5,6 @@ import {
   LOGIN_FAIL,
   ADMIN_LOADED,
   AUTH_FAIL,
-  LOGIN_SUB_ADMIN_SUCCESS,
 } from "../actions";
 import { setAlert } from "./alertAction";
 import { useDispatch } from "store";
@@ -27,11 +26,15 @@ export const login = (userObj) => async (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data,
     });
+
     dispatch(loadUser());
+  
   } catch (error) {
+    
     dispatch({
       type: LOGIN_FAIL,
     });
+
     if (error.response) {
       dispatch(setAlert(error.response.data.message, "danger"));
       return error.response.data.message;
@@ -52,9 +55,10 @@ export const loadUser = (data) => async (dispatch) => {
     const res = await axios.get(PROXY + "admin/auth", body, config);
 
     dispatch({
-      type: LOGIN_SUB_ADMIN_SUCCESS,
+      type: ADMIN_LOADED,
       payload: res.data.result,
     });
+    
     return res.data.result;
   } catch (error) {
     dispatch({
@@ -87,23 +91,7 @@ export const changeAdminPassword = (data, id) => async (dispatch) => {
   return res;
 };
 
-export const updateAdminProfileData = (id, formData) => async (dispatch) => {
-  const res = await axios.put(`${PROXY}admin/updateProfile`, formData, config);
+export const updateAdminProfileData = (id, data) => async (dispatch) => {
+  const res = await axios.put(`${PROXY}admin/updateProfile`, data, config);
   return res;
-};
-
-export const changePassword = (objPassword) => async (dispatch) => {
-  const body = JSON.stringify(objPassword);
-
-  const res = await axios.put(
-    PROXY + "admin/change-password/" + objPassword.id,
-    body,
-    config
-  );
-  dispatch(openSnackbar(res.data.message, "success"));
-  return res;
-};
-
-export const updateProfile = (id, formData) => async (dispatch) => {
-  return await axios.put(PROXY + "admin/update-profile", formData);
 };

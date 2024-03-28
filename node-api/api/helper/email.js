@@ -99,7 +99,7 @@ const MailTemplate = (data) => {
     </head>
 
     <body style="margin: 0 !important; padding: 0 !important; font-family: 'Rubik', sans-serif;">
-        <div style="max-width: 900px; margin: 0 auto; padding: 0; width: 100%;">
+        <div style="margin: 0 auto; padding: 0; width: 100%;">
 
             <!-- body content -->
             <table border="0" cellpadding="0" cellspacing="0" width="100%">
