@@ -12,3 +12,7 @@ export const getRecords = (page, limit, search) => async (dispatch) => {
     })
     return res.data.result;
 }
+
+export const updateRecord = (data, record_id) => async () => {
+    return await axios.post(PROXY + `admin/record/edit-record/${record_id}`, data);
+}

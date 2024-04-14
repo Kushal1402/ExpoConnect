@@ -21,15 +21,19 @@ import {
   styled,
   tableCellClasses,
   CircularProgress,
+  Tooltip,
 } from "@mui/material";
+import Zoom from '@mui/material/Zoom';
 import { useTheme } from "@mui/material/styles";
-import { IconSearch } from "@tabler/icons";
 import ClearIcon from "@mui/icons-material/Clear";
+
+import { IconSearch } from "@tabler/icons";
 
 // project imports
 import useRecursiveTimeout from "Helpers/useRecursiveTimeout";
 import MainCard from "ui-component/cards/MainCard";
 import { getRecords } from "../../../store/slices/recordAction";
+import EditRecord from "./EditRecord";
 
 // assets
 
@@ -56,6 +60,10 @@ const Records = (props) => {
   const [orderBy, setOrderBy] = React.useState("calories");
   const [page, setPage] = React.useState(1);
   const [dense] = React.useState(false);
+
+  // Edit State
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [recordData, setRecordData] = React.useState({});
 
   useEffect(() => {
     props.getRecords(1, 10, "");
@@ -117,6 +125,15 @@ const Records = (props) => {
       colSpan: "1",
       align: 'left'
     },
+    {
+      id: "action",
+      numeric: false,
+      disablePadding: false,
+      label: "Action",
+      sortable: false,
+      colspan: "1",
+      align: "right"
+    }
   ];
 
   // ==============================|| TABLE - HEADER ||============================== //
@@ -258,6 +275,24 @@ const Records = (props) => {
                       <TableCell align="left">{row.position ? row.position : '-'}</TableCell>
                       <TableCell align="left">{row.contact_number ? `${row.country_code} ${row.contact_number}` : '-'}</TableCell>
                       <TableCell align="left">{row.email ? row.email : '-'}</TableCell>
+                      <TableCell align="right">
+                        <Tooltip title={"Edit Record"} arrow TransitionComponent={Zoom}>
+                          <IconButton
+                            aria-label="edit"
+                            color="primary"
+                            size="medium"
+                            onClick={(e) => {
+                              setOpenEdit(true)
+                              setRecordData(row)
+                            }}
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 12 12" fill="#5DADE2">
+                              <path d="M0.000244141 9.84981V11.6151C0.000244141 11.8277 0.172592 12.0001 0.385207 12.0001H2.15432C2.25642 12.0001 2.35434 11.9595 2.42654 11.8873L9.70061 4.61324L7.39029 2.30298L0.113046 9.57749C0.0408194 9.64971 0.000244141 9.74764 0.000244141 9.84981Z" fill="#025DBF" />
+                              <path d="M8.34399 1.34957L10.6542 3.65966L11.7784 2.53538C12.0791 2.23471 12.0791 1.74722 11.7784 1.44655L10.5574 0.225505C10.2567 -0.0751284 9.76928 -0.0751747 9.46863 0.225405L8.34399 1.34957Z" fill="#025DBF" />
+                            </svg>
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   )) : loading ? (
                     <TableRow>
@@ -265,14 +300,13 @@ const Records = (props) => {
                         <CircularProgress color='inherit' variant='indeterminate' />
                       </TableCell>
                     </TableRow>
-                  )
-                    : (
-                      <TableRow>
-                        <TableCell colSpan={12} sx={{ textAlign: 'center' }}>
-                          <Typography variant='body2' component='h6' >No record found</Typography>
-                        </TableCell>
-                      </TableRow>
-                    )}
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={12} sx={{ textAlign: 'center' }}>
+                        <Typography variant='body2' component='h6' >No record found</Typography>
+                      </TableCell>
+                    </TableRow>
+                  )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -300,6 +334,18 @@ const Records = (props) => {
         </Grid>
 
       </MainCard>
+
+      {openEdit === true && (
+        <EditRecord
+          open={openEdit}
+          close={() => {
+            setOpenEdit(false)
+            setRecordData({})
+            props.getRecords(page, 10, "");
+          }}
+          record_data={recordData}
+        />
+      )}
 
     </>
   );

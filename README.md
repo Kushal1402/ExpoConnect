@@ -30,13 +30,24 @@ The project folder structure is organized as follows:
 8. In separate terminals, navigate to the front/ and admin/ directories and run npm start to start the frontend applications.
 9. Access the form application at http://localhost:3000 and the admin panel at http://localhost:3001.
 10. Make sure to change .env as required (added .env.example for easy understanding).
+ 
+```bash
+git clone https://github.com/Kushal1402/ExpoConnect.git
+```
+
+```bash
+cd ExpoConnect
+cd admin/front/node-api
+npm install
+npm start
+```
 
 ## 🤝 Contributing
 Contributions, issues and feature requests are welcome!
 Feel free to check the [issues page](https://github.com/Kushal1402/ExpoConnect/issues).
 
 ## Contribution Guidlines
-1. Fork and clone the repository.
+1. Fork/clone the repository.
 2. Create a new branch: git checkout -b feature/my-feature.
 3. Commit your changes: git commit -m "Add my feature".
 4. Push to the branch: git push origin feature/my-feature.
