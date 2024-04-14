@@ -11,6 +11,13 @@ Use the admin panel to view and manage captured records.
 ## Built With
 - MERN + Material-UI
 
+## Features
+- **Mobile-first UI design.**
+- **View & manage records from admin-panel.**
+- **Email notification with company details.**
+- **Export visitor records to Excel/CSV files.**
+- more features upcoming...stay tuned
+
 ## Folder Structure
 The project folder structure is organized as follows:
 
