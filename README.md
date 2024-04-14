@@ -1,4 +1,8 @@
 # ExpoConnect
+<img src="https://github.com/Kushal1402/ExpoConnect/assets/80979594/f1e6c6e2-c8ee-4646-9cf9-087a3a767a35" alt="ExpoConnect-Mobile-Mockup-Image" width="600" >
+<!-- ![ExpoConnect-Mobile-Mockup](https://github.com/Kushal1402/ExpoConnect/assets/80979594/f1e6c6e2-c8ee-4646-9cf9-087a3a767a35) -->
+
+[ExpoConnect](https://expo-connect.vercel.app/) [ExpoConnect-Admin](https://expo-connect-admin.vercel.app/)
 
 ## Description
 This project, streamlines the process of capturing and managing visitor information at business exhibitions.
