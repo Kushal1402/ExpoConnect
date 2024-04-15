@@ -8,4 +8,6 @@ router.get("/listing", adminCheckAuth, AdminRecordController.getListing);
 
 router.post("/edit-record/:record_id", adminCheckAuth, AdminRecordController.updateRecord);
 
+router.get("/csv", adminCheckAuth, AdminRecordController.generateCsv);
+
 module.exports = router;

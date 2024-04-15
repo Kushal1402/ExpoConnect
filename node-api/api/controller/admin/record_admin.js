@@ -1,6 +1,8 @@
 const RecordsModel = require("../../models/records");
-const helper = require("../../helper/helper");
 const mongoose = require('mongoose')
+const createCsvStringifier = require('csv-writer').createObjectCsvStringifier;
+const moment = require('moment');
+const { storageRef } = require("../../config/firebaseConnection");
 
 exports.getListing = async (req, res) => {
 
@@ -116,3 +118,86 @@ exports.updateRecord = async (req, res) => {
         });
     }
 }
+
+exports.generateCsv = async (req, res) => {
+    try {
+        const records = await RecordsModel.find().sort({ createdAt: -1 });
+
+        if (records.length <= 0) {
+            return res.status(404).send({
+                message: "No data found",
+            });
+        }
+
+        records.forEach(record => {
+            record.contact_number = `${record.country_code} ${record.contact_number}`;
+        });
+
+        // Getting current date and time using Moment.js
+        const dateTimeString = moment().format("YYYY-MM-DD_HH-mm-ss");
+
+        // Setting FileName
+        const fileName = `ExpoConnect_Record_List_${dateTimeString}.csv`;
+
+        // Create CSV-String
+        const csvStringifier = createCsvStringifier({
+            header: [
+                { id: 'user_name', title: 'Name' },
+                { id: 'company_name', title: 'Company Name' },
+                { id: 'position', title: 'Position' },
+                { id: 'contact_number', title: 'Phone Number' },
+                { id: 'email', title: 'Email' },
+            ]
+        });
+
+        // Create CSV header by joining header strings
+        const csvHeader = csvStringifier.getHeaderString();
+
+        // Create CSV string by joining record strings        
+        const csvString = csvStringifier.stringifyRecords(records);
+
+        // Combine header row and CSV data
+        const csvData = csvHeader + '\n' + csvString;
+        // Convert CSV data to a Buffer
+        const csvBuffer = Buffer.from(csvData);
+
+        // Upload CSV to Firebase Storage
+        const fileRef = storageRef.child(`records/${fileName}`);
+        const uploadTask = fileRef.put(csvBuffer);
+
+        let hostedFileURL;
+
+        uploadTask.on('state_changed', snapshot => {
+            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+                case 'paused':
+                    console.log('Upload is paused');
+                    break;
+                case 'running':
+                    console.log('Upload is running');
+                    break;
+            }
+        }, error => {
+            console.error('Error uploading CSV:', error);
+            return res.status(500).send({
+                message: "Error occurred, Please try again later",
+                error: error,
+            });
+        }, async () => {
+            // Upload completed successfully
+            hostedFileURL = await fileRef.getDownloadURL();
+            return res.status(200).json({
+                message: "CSV file generated successfully",
+                generated_file: hostedFileURL,
+                file_name: fileName
+            });
+        });        
+    } catch (error) {
+        console.log("Listing error", error);
+        return res.status(500).send({
+            message: "Error occurred, Please try again",
+            error: error,
+        });
+    }
+};
