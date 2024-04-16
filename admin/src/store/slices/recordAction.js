@@ -16,3 +16,8 @@ export const getRecords = (page, limit, search) => async (dispatch) => {
 export const updateRecord = (data, record_id) => async () => {
     return await axios.post(PROXY + `admin/record/edit-record/${record_id}`, data);
 }
+
+export const getCsvFile = () => async () => {
+    const res = await axios.get(PROXY + `admin/record/csv`);
+    return res;
+}

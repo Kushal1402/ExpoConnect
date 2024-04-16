@@ -12,6 +12,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Button,
   IconButton,
   Divider,
   Typography,
@@ -22,23 +23,26 @@ import {
   tableCellClasses,
   CircularProgress,
   Tooltip,
+  Zoom,
 } from "@mui/material";
-import Zoom from '@mui/material/Zoom';
 import { useTheme } from "@mui/material/styles";
-import ClearIcon from "@mui/icons-material/Clear";
-
-import { IconSearch } from "@tabler/icons";
 
 // project imports
 import useRecursiveTimeout from "Helpers/useRecursiveTimeout";
 import MainCard from "ui-component/cards/MainCard";
-import { getRecords } from "../../../store/slices/recordAction";
+import { getRecords, getCsvFile } from "../../../store/slices/recordAction";
 import EditRecord from "./EditRecord";
+import { openSnackbar } from "store/slices/snackbar";
 
 // assets
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import ClearIcon from "@mui/icons-material/Clear";
+import { IconSearch } from "@tabler/icons";
 
 // third-party
 import { connect, useSelector } from "react-redux";
+import { saveAs } from 'file-saver';
+import { useDispatch } from "store";
 
 // ==============================|| TABLE - DATA TABLE ||============================== //
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -55,6 +59,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const Records = (props) => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [search, setSearch] = React.useState("");
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -64,6 +69,9 @@ const Records = (props) => {
   // Edit State
   const [openEdit, setOpenEdit] = React.useState(false);
   const [recordData, setRecordData] = React.useState({});
+
+  // Download Loading State
+  const [downloadLoad, setDownloadLoad] = React.useState(false);
 
   useEffect(() => {
     props.getRecords(1, 10, "");
@@ -204,6 +212,47 @@ const Records = (props) => {
     await props.getRecords(p, 10, search);
   }
 
+  // ==============================|| CSV Download ||============================== //
+  const onExportCSVClick = (e) => {
+    e.preventDefault();
+    setDownloadLoad(true);
+
+    props.getCsvFile().then((res) => {
+      if (res.data.generated_file) {
+        saveAs(res.data.generated_file, res.data.file_name);
+        setDownloadLoad(false)
+      } else {
+        setDownloadLoad(false);
+        dispatch(
+          openSnackbar({
+            open: true,
+            message: "No csv file found",
+            variant: "alert",
+            alert: {
+              color: "success",
+            },
+            transition: "Fade",
+            anchorOrigin: { vertical: "top", horizontal: "right" },
+          })
+        )
+      }
+    }).catch((err) => {
+      setDownloadLoad(false)
+      dispatch(
+        openSnackbar({
+          open: true,
+          message: err.response.data.message,
+          variant: "alert",
+          alert: {
+            color: "error",
+          },
+          transition: "Fade",
+          anchorOrigin: { vertical: "top", horizontal: "right" },
+        })
+      )
+    });
+  };
+
   return (
     <>
       <MainCard
@@ -215,38 +264,64 @@ const Records = (props) => {
         }
         secondary={
           <>
-            <TextField
-              type="text"
-              name="search"
-              label={"Search"}
-              value={search}
-              fullWidth
-              onKeyDown={handleKeyDown}
-              onChange={handleSearch}
-              startAdornment={
-                <InputAdornment position="start">
-                  <IconSearch stroke={1.5} size="1rem" />
-                </InputAdornment>
-              }
-              InputProps={{
-                endAdornment: (
-                  <IconButton
-                    sx={{ display: search ? "" : "none" }}
-                    onClick={handleClearSearch}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                ),
-              }}
-              sx={{
-                width: "100%",
-                [theme.breakpoints.down("sm")]: {
-                  // mb:1
-                  width: "100%",
-                },
-              }}
-              size="small"
-            />
+            <Grid container>
+              <Grid item sx={{ display: "flex", justifyContent: "center", }}>
+
+                <Button
+                  variant="contained"
+                  startIcon={downloadLoad === true ? null : <FileDownloadIcon />}
+                  onClick={(e) => onExportCSVClick(e)}
+                  disableElevation
+                  sx={{
+                    background: "#025DBF",
+                    mr: "10px",
+                    mt: '1px',
+                    width: "200px",
+                    height: "40px",
+                    borderRadius: "8px",
+                    lineHeight: '1.05',
+                    textTransform: "none",
+                  }}
+                  size="small"
+                >
+                  {downloadLoad === true ? <CircularProgress size={24} color="inherit" /> : `Export as CSV`}
+                </Button>
+
+                <TextField
+                  type="text"
+                  name="search"
+                  label={"Search"}
+                  value={search}
+                  fullWidth
+                  onKeyDown={handleKeyDown}
+                  onChange={handleSearch}
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <IconSearch stroke={1.5} size="1rem" />
+                    </InputAdornment>
+                  }
+                  InputProps={{
+                    endAdornment: (
+                      <IconButton
+                        sx={{ display: search ? "" : "none" }}
+                        onClick={handleClearSearch}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    ),
+                  }}
+                  sx={{
+                    width: "100%",
+                    [theme.breakpoints.down("sm")]: {
+                      // mb:1
+                      width: "100%",
+                    },
+                  }}
+                  size="small"
+                />
+
+              </Grid>
+            </Grid>
           </>
         }
       >
@@ -351,4 +426,4 @@ const Records = (props) => {
   );
 };
 const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps, { getRecords })(Records);
+export default connect(mapStateToProps, { getRecords, getCsvFile })(Records);
