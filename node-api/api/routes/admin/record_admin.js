@@ -6,6 +6,8 @@ const adminCheckAuth = require("../../middleware/admin-check-auth");
 
 router.get("/listing", adminCheckAuth, AdminRecordController.getListing);
 
+router.post("/add", adminCheckAuth, AdminRecordController.add);
+
 router.post("/edit-record/:record_id", adminCheckAuth, AdminRecordController.updateRecord);
 
 router.get("/csv", adminCheckAuth, AdminRecordController.generateCsv);

@@ -1,4 +1,4 @@
-import { GET_RECORDS } from "./actions";
+import { GET_RECORDS, GET_RECORDS_ERROR } from "./actions";
 
 const initialState = {
     records: {},
@@ -15,6 +15,12 @@ export default function recordReducer(state = initialState, action) {
                 loading: false,
                 records: payload
             };
+        case GET_RECORDS_ERROR:
+            return {
+                ...state,
+                loading: false,
+                records: initialState.records
+            }
         default:
             return state;
     }

@@ -31,18 +31,21 @@ import { useTheme } from "@mui/material/styles";
 import useRecursiveTimeout from "Helpers/useRecursiveTimeout";
 import MainCard from "ui-component/cards/MainCard";
 import { getRecords, getCsvFile } from "../../../store/slices/recordAction";
+import AddRecords from "./AddRecords";
 import EditRecord from "./EditRecord";
 import { openSnackbar } from "store/slices/snackbar";
 
 // assets
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ClearIcon from "@mui/icons-material/Clear";
+import Add from '@mui/icons-material/Add';
 import { IconSearch } from "@tabler/icons";
 
 // third-party
 import { connect, useSelector } from "react-redux";
 import { saveAs } from 'file-saver';
 import { useDispatch } from "store";
+import moment from "moment";
 
 // ==============================|| TABLE - DATA TABLE ||============================== //
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -70,21 +73,28 @@ const Records = (props) => {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [recordData, setRecordData] = React.useState({});
 
+  // Add State
+  const [openAdd, setOpenAdd] = React.useState(false);
+
   // Download Loading State
   const [downloadLoad, setDownloadLoad] = React.useState(false);
 
+  const record = useSelector((state) => state.record);
+  const auth = useSelector((state) => state.auth);
+  const { records, loading } = record;
+  const { isAuthenticated } = auth;
+
   useEffect(() => {
-    props.getRecords(1, 10, "");
-  }, [props])
+    if (isAuthenticated === true) {
+      props.getRecords(1, 10, "");
+    }
+  }, [])
 
   useRecursiveTimeout(async () => {
     if (search === "") {
       props.getRecords(page, 10, "");
     }
   }, 60000);
-
-  const record = useSelector((state) => state.record);
-  const { records, loading } = record;
 
   // table header
   const headCells = [
@@ -132,6 +142,15 @@ const Records = (props) => {
       sortable: true,
       colSpan: "1",
       align: 'left'
+    },
+    {
+      id: "visited_at",
+      numeric: true,
+      disablePadding: false,
+      label: "Visited At",
+      sortable: true,
+      colSpan: "1",
+      align: "left"
     },
     {
       id: "action",
@@ -269,6 +288,29 @@ const Records = (props) => {
 
                 <Button
                   variant="contained"
+                  startIcon={<Add />}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenAdd(true);
+                  }}
+                  disableElevation
+                  sx={{
+                    background: "#025DBF",
+                    mr: "10px",
+                    mt: '1px',
+                    width: "200px",
+                    height: "40px",
+                    borderRadius: "8px",
+                    lineHeight: '1.05',
+                    textTransform: "none",
+                  }}
+                  size="small"
+                >
+                  Add Record
+                </Button>
+
+                <Button
+                  variant="contained"
                   startIcon={downloadLoad === true ? null : <FileDownloadIcon />}
                   onClick={(e) => onExportCSVClick(e)}
                   disableElevation
@@ -276,7 +318,7 @@ const Records = (props) => {
                     background: "#025DBF",
                     mr: "10px",
                     mt: '1px',
-                    width: "200px",
+                    width: "210px",
                     height: "40px",
                     borderRadius: "8px",
                     lineHeight: '1.05',
@@ -350,6 +392,7 @@ const Records = (props) => {
                       <TableCell align="left">{row.position ? row.position : '-'}</TableCell>
                       <TableCell align="left">{row.contact_number ? `${row.country_code} ${row.contact_number}` : '-'}</TableCell>
                       <TableCell align="left">{row.email ? row.email : '-'}</TableCell>
+                      <TableCell align="left">{row.createdAt ? moment(row.createdAt).format("DD-MM-YYYY") : '-'}</TableCell>
                       <TableCell align="right">
                         <Tooltip title={"Edit Record"} arrow TransitionComponent={Zoom}>
                           <IconButton
@@ -410,6 +453,18 @@ const Records = (props) => {
 
       </MainCard>
 
+      {/* Add Popup */}
+      {openAdd === true && (
+        <AddRecords
+          open={openAdd}
+          close={() => {
+            setOpenAdd(false);
+            props.getRecords(page, 10, "")
+          }}
+        />
+      )}
+
+      {/* Edit Popup */}
       {openEdit === true && (
         <EditRecord
           open={openEdit}
@@ -425,5 +480,8 @@ const Records = (props) => {
     </>
   );
 };
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  record: state.record
+});
 export default connect(mapStateToProps, { getRecords, getCsvFile })(Records);

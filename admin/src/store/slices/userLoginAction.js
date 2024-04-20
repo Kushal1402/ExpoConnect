@@ -7,7 +7,6 @@ import {
   AUTH_FAIL,
 } from "../actions";
 import { setAlert } from "./alertAction";
-import { useDispatch } from "store";
 import { openSnackbar } from "store/slices/snackbar";
 import setAuthToken from "../../Helpers/setAuthToken";
 const config = {
@@ -28,9 +27,9 @@ export const login = (userObj) => async (dispatch) => {
     });
 
     dispatch(loadUser());
-  
+
   } catch (error) {
-    
+
     dispatch({
       type: LOGIN_FAIL,
     });
@@ -58,7 +57,7 @@ export const loadUser = (data) => async (dispatch) => {
       type: ADMIN_LOADED,
       payload: res.data.result,
     });
-    
+
     return res.data.result;
   } catch (error) {
     dispatch({

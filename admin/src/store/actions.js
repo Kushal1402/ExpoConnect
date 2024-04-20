@@ -16,3 +16,4 @@ export const DELETE_ALERT = "DELETE_ALERT";
 export const DELETE_ALL_ALERT = "DELETE_ALL_ALERT";
 
 export const GET_RECORDS = "GET_RECORDS";
+export const GET_RECORDS_ERROR = "GET_RECORDS_ERROR";

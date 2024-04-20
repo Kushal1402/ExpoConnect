@@ -24,7 +24,7 @@ import CloseIcon from '@mui/icons-material/Close';
 // project imports
 import CountryCodeArr from "Helpers/CountryCodeArr";
 import AnimateButton from "ui-component/extended/AnimateButton";
-import { updateRecord } from "../../../store/slices/recordAction";
+import { addRecord } from "../../../store/slices/recordAction";
 import { useDispatch } from "store";
 import { openSnackbar } from "store/slices/snackbar";
 
@@ -64,10 +64,10 @@ BootstrapDialogTitle.propTypes = {
     children: PropTypes.node
 };
 
-const EditRecord = (props) => {
+const AddRecords = (props) => {
 
     const dispatch = useDispatch();
-    const { open, close, record_data, updateRecord } = props
+    const { open, close, addRecord } = props;
 
     const [submitLoader, setSubmitLoader] = useState(false);
 
@@ -85,7 +85,6 @@ const EditRecord = (props) => {
     });
 
     const onSubmit = (values, { resetForm }) => {
-        // console.log("values", values);
 
         setSubmitLoader(true);
 
@@ -98,7 +97,8 @@ const EditRecord = (props) => {
             email: values.email
         };
 
-        updateRecord(data, record_data._id).then((res) => {
+        addRecord(data).then((res) => {
+            console.log(res, "res");
             close();
             setSubmitLoader(false);
             dispatch(
@@ -133,14 +133,13 @@ const EditRecord = (props) => {
     }
 
     const formik = useFormik({
-        enableReinitialize: true,
         initialValues: {
-            user_name: record_data?.user_name,
-            company_name: record_data?.company_name,
-            position: record_data?.position,
-            country_code: record_data?.country_code,
-            contact_number: record_data?.contact_number,
-            email: record_data?.email
+            user_name: "",
+            company_name: "",
+            position: "",
+            country_code: "",
+            contact_number: "",
+            email: ""
         },
         validationSchema,
         onSubmit
@@ -149,13 +148,19 @@ const EditRecord = (props) => {
     return (
         <div style={{ margin: "auto" }}>
             <BootstrapDialog open={open} onClose={close} TransitionComponent={Transition}>
-
                 <BootstrapDialogTitle onClose={close}>
-                    Edit Record
+                    Add Record
                 </BootstrapDialogTitle>
 
                 <Formik>
-                    <form noValidate onSubmit={(e) => formik.handleSubmit(e)} id="record-edit-form">
+                    <form
+                        noValidate
+                        onSubmit={(e) => {
+                            e.preventDefault()
+                            formik.handleSubmit(e)
+                        }}
+                        id="record-add-form"
+                    >
                         <DialogContent dividers>
 
                             <Grid container spacing={1}>
@@ -164,7 +169,7 @@ const EditRecord = (props) => {
                                 <Grid item xs={12} sm={12} md={12} lg={12}>
                                     <FormControl fullWidth>
                                         <Typography variant="body1" gutterBottom sx={{ color: "#000000", fontSize: { sm: "0.825rem", md: "0.85rem", lg: "0.95rem" } }}>
-                                            User Name
+                                            User Name<span style={{ color: "red" }}>*</span>
                                         </Typography>
                                         <TextField
                                             fullWidth
@@ -187,7 +192,7 @@ const EditRecord = (props) => {
                                 <Grid item xs={12} sm={12} sx={{ pt: "12px !important" }}>
                                     <FormControl fullWidth>
                                         <Typography variant="body1" gutterBottom sx={{ color: "#000000", fontSize: { sm: "0.825rem", md: "0.85rem", lg: "0.95rem" } }}>
-                                            Company Name
+                                            Company Name<span style={{ color: "red" }}>*</span>
                                         </Typography>
                                         <TextField
                                             fullWidth
@@ -234,7 +239,7 @@ const EditRecord = (props) => {
                                     <Grid container spacing={1} justifyContent="space-between">
                                         <Grid item xs={12}>
                                             <Typography variant="body1" sx={{ fontSize: "0.875rem", color: "rgb(33, 33, 33)", lineHeight: "1.75", }} fullWidth>
-                                                Phone Number
+                                                Phone Number<span style={{ color: "red" }}>*</span>
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6}>
@@ -267,7 +272,7 @@ const EditRecord = (props) => {
                                                         error={Boolean(formik.touched.country_code && formik.errors.country_code)}
                                                         inputProps={{
                                                             ...params.inputProps,
-                                                            autoComplete: "new-number", // disable autocomplete and autofill
+                                                            autoComplete: "new-number",
                                                         }}
                                                     />
                                                 )}
@@ -361,7 +366,7 @@ const EditRecord = (props) => {
                                 <Grid item xs={12} sm={12} sx={{ pt: "12px !important" }}>
                                     <FormControl fullWidth>
                                         <Typography variant="body1" gutterBottom sx={{ color: "#000000", fontSize: { sm: "0.825rem", md: "0.85rem", lg: "0.95rem" } }}>
-                                            Email
+                                            Email<span style={{ color: "red" }}>*</span>
                                         </Typography>
                                         <TextField
                                             type="email"
@@ -408,4 +413,4 @@ const EditRecord = (props) => {
 }
 
 const mapStateToProps = (state) => ({});
-export default connect(mapStateToProps, { updateRecord })(EditRecord);
+export default connect(mapStateToProps, { addRecord })(AddRecords);
