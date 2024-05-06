@@ -12,4 +12,6 @@ router.post("/edit-record/:record_id", adminCheckAuth, AdminRecordController.upd
 
 router.get("/csv", adminCheckAuth, AdminRecordController.generateCsv);
 
+router.post("/delete", adminCheckAuth, AdminRecordController.deleteRecord);
+
 module.exports = router;

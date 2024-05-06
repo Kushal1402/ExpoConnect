@@ -8,6 +8,9 @@
 This project, streamlines the process of capturing and managing visitor information at business exhibitions.
 With a user-friendly single-page form for data collection and an intuitive admin-panel for easy record management, this project provide a seamless solution for businesses to connect with potential leads and maximize their exhibition presence.
 
+## MVP
+This project is currently in the MVP stage. It is an early version of the software that includes enough features to allow the web-application to be deployed for a selected group of users who can then provide feedback for future product development. As an MVP, this product is continuously being refined based on user feedback and evolving requirements.
+
 ## Usage
 Fill out the form in the form application to capture visitor information.
 Use the admin panel to view and manage captured records.

@@ -34,3 +34,8 @@ export const getCsvFile = () => async () => {
     const res = await axios.get(PROXY + `admin/record/csv`);
     return res;
 }
+
+export const deleteRecords = (data) => async () => {
+    // console.log("🚀 ~ deleteRecords ~ data:", data)
+    return await axios.post(PROXY + `admin/record/delete`, data);
+}

@@ -95,7 +95,7 @@ exports.add = async (req, res, next) => {
     };
 
     const { user_name, company_name, position, country_code, contact_number, email } = req.body;
-    
+
     try {
 
         const sameEmail = await RecordsModel.findOne({ email: email });
@@ -265,7 +265,7 @@ exports.generateCsv = async (req, res) => {
                 generated_file: hostedFileURL,
                 file_name: fileName
             });
-        });        
+        });
     } catch (error) {
         console.log("Listing error", error);
         return res.status(500).send({
@@ -274,3 +274,30 @@ exports.generateCsv = async (req, res) => {
         });
     }
 };
+
+exports.deleteRecord = async (req, res) => {
+
+    const id = req.body.id;
+
+    if (id === null || id === undefined || id === "") {
+        return res.status(422).send({
+            message: "Id is missing, empty or invalid. Please provide a valid Id",
+        });
+    }
+
+    try {
+        let message = "Records successfully deleted";
+
+        await RecordsModel.deleteMany({ _id: { $in: id } })
+
+        return res.status(200).json({
+            message: message,
+        });
+    } catch (err) {
+        console.log("deleteRecord ~ err:", err)
+        return res.status(500).send({
+            message: "Error occurred, Please try again later",
+            error: err.message,
+        });
+    }
+}
