@@ -258,7 +258,7 @@ const Records = (props) => {
             message: "No csv file found",
             variant: "alert",
             alert: {
-              color: "success",
+              color: "error",
             },
             transition: "Fade",
             anchorOrigin: { vertical: "top", horizontal: "right" },

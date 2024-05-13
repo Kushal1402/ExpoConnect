@@ -4,20 +4,15 @@ import PropTypes from "prop-types";
 // material-ui
 import {
     Grid,
-    Box,
     Slide,
     Button,
-    IconButton,
-    TextField,
     Typography,
     styled,
-    FormControl,
     CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
-    Autocomplete,
     DialogContentText,
 } from "@mui/material";
 
@@ -27,7 +22,6 @@ import { deleteRecords } from "../../../store/slices/recordAction";
 import { openSnackbar } from "store/slices/snackbar";
 
 // assets
-import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from "assets/images/DeleteIcon.svg";
 
 // third-party
@@ -127,13 +121,13 @@ const DeleteConfirmPopup = (props) => {
                 <DialogActions sx={{ pr: 4.5, pl: 4.5, pb: 2, pt: 0.8 }}>
                     <Grid container spacing={2} justifyContent='center'>
                         <Grid item>
-                            <Button variant='outlined' color='error' disabled={submitLoader} onClick={cancelClose}>
+                            <Button variant='outlined' color='error' disabled={submitLoader} onClick={cancelClose} sx={{ borderRadius: "8px", }}>
                                 Cancel
                             </Button>
                         </Grid>
                         <Grid item>
                             <AnimateButton>
-                                <Button fullWidth type="submit" variant="contained" disabled={submitLoader} onClick={() => handleSubmit()} sx={{ background: "rgb(25, 118, 210)" }}>
+                                <Button fullWidth type="submit" variant="contained" disabled={submitLoader} onClick={() => handleSubmit()} sx={{ background: "#025DBF", borderRadius: "8px", }}>
                                     {submitLoader ? <CircularProgress variant="indeterminate" color="inherit" size={24} /> : "Confirm"}
                                 </Button>
                             </AnimateButton>
