@@ -193,8 +193,23 @@ exports.updateRecord = async (req, res) => {
 }
 
 exports.generateCsv = async (req, res) => {
+
+    const { start_date, end_date } = req.query;
+    // console.log("🚀 ~ exports.generateCsv= ~ req.query:", req.query)
+
     try {
-        const records = await RecordsModel.find().sort({ createdAt: -1 });
+        let matchObj = {};
+
+        // Check if both start_date and end_date are provided and valid
+        if ((start_date && end_date) && (start_date !== null && end_date !== null)) {
+            matchObj.createdAt = {
+                $gte: new Date(start_date), // Records created on or after start_date
+                $lte: new Date(end_date),  // Records created on or before end_date
+            };
+        }
+        // console.log("🚀 ~ exports.generateCsv= ~ matchObj:", matchObj)
+
+        const records = await RecordsModel.find(matchObj).sort({ createdAt: -1 });
 
         if (records.length <= 0) {
             return res.status(404).send({
