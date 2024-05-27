@@ -35,7 +35,6 @@ import { getRecords, getCsvFile } from "../../../store/slices/recordAction";
 import AddRecords from "./AddRecords";
 import EditRecord from "./EditRecord";
 import DeleteConfirmPopup from "./DeleteConfirmPopup";
-import { openSnackbar } from "store/slices/snackbar";
 
 // assets
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -46,9 +45,8 @@ import { IconSearch } from "@tabler/icons";
 
 // third-party
 import { connect, useSelector } from "react-redux";
-import { saveAs } from 'file-saver';
-import { useDispatch } from "store";
 import moment from "moment";
+import ExportRecord from "./ExportRecord";
 
 // ==============================|| TABLE - DATA TABLE ||============================== //
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -65,7 +63,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const Records = (props) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
   const [search, setSearch] = React.useState("");
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -86,6 +83,9 @@ const Records = (props) => {
 
   // Download Loading State
   const [downloadLoad, setDownloadLoad] = React.useState(false);
+
+  // CSV Select Popup State
+  const [openCsvPopup, setOpenCsvPopup] = React.useState(false);
 
   const record = useSelector((state) => state.record);
   const auth = useSelector((state) => state.auth);
@@ -241,47 +241,6 @@ const Records = (props) => {
     await props.getRecords(p, 10, search);
   }
 
-  // ==============================|| CSV Download ||============================== //
-  const onExportCSVClick = (e) => {
-    e.preventDefault();
-    setDownloadLoad(true);
-
-    props.getCsvFile().then((res) => {
-      if (res.data.generated_file) {
-        saveAs(res.data.generated_file, res.data.file_name);
-        setDownloadLoad(false)
-      } else {
-        setDownloadLoad(false);
-        dispatch(
-          openSnackbar({
-            open: true,
-            message: "No csv file found",
-            variant: "alert",
-            alert: {
-              color: "error",
-            },
-            transition: "Fade",
-            anchorOrigin: { vertical: "top", horizontal: "right" },
-          })
-        )
-      }
-    }).catch((err) => {
-      setDownloadLoad(false)
-      dispatch(
-        openSnackbar({
-          open: true,
-          message: err.response.data.message,
-          variant: "alert",
-          alert: {
-            color: "error",
-          },
-          transition: "Fade",
-          anchorOrigin: { vertical: "top", horizontal: "right" },
-        })
-      )
-    });
-  };
-
   // ==============================|| Delete ||============================== //
   const isSelected = (title) => selected.indexOf(title) !== -1;
 
@@ -383,7 +342,10 @@ const Records = (props) => {
                 <Button
                   variant="contained"
                   startIcon={downloadLoad === true ? null : <FileDownloadIcon />}
-                  onClick={(e) => onExportCSVClick(e)}
+                  onClick={() => {
+                    setDownloadLoad(true)
+                    setOpenCsvPopup(true)
+                  }}
                   disableElevation
                   sx={{
                     background: "#025DBF",
@@ -583,6 +545,22 @@ const Records = (props) => {
             props.getRecords(page, 10, "");
           }}
           record_ids={deleteRecordIds}
+        />
+      )}
+
+      {/* CSV Select Popup */}
+      {openCsvPopup === true && (
+        <ExportRecord
+          open={openCsvPopup}
+          cancelClose={() => {
+            setOpenCsvPopup(false);
+            setDownloadLoad(false);
+          }}
+          confirmClose={() => {
+            setOpenCsvPopup(false);
+            setDownloadLoad(false);
+            props.getRecords(page, 10, "");
+          }}
         />
       )}
 

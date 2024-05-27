@@ -201,10 +201,20 @@ exports.generateCsv = async (req, res) => {
         let matchObj = {};
 
         // Check if both start_date and end_date are provided and valid
-        if ((start_date && end_date) && (start_date !== null && end_date !== null)) {
+        if (
+            start_date !== null &&
+            end_date !== null &&
+            start_date !== undefined &&
+            end_date !== undefined &&
+            start_date !== "" &&
+            end_date !== "" &&
+            moment(start_date, 'MM-DD-YYYY').isValid() &&
+            moment(end_date, 'MM-DD-YYYY').isValid() &&
+            moment(start_date, 'MM-DD-YYYY').isBefore(moment(end_date, 'MM-DD-YYYY'))
+        ) {
             matchObj.createdAt = {
-                $gte: new Date(start_date), // Records created on or after start_date
-                $lte: new Date(end_date),  // Records created on or before end_date
+                $gte: moment(start_date, 'MM-DD-YYYY').startOf('day').toDate(), // Records created on or after start_date
+                $lte: moment(end_date, 'MM-DD-YYYY').endOf('day').toDate(),  // Records created on or before end_date
             };
         }
         // console.log("🚀 ~ exports.generateCsv= ~ matchObj:", matchObj)

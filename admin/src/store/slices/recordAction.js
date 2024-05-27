@@ -30,8 +30,8 @@ export const updateRecord = (data, record_id) => async () => {
     return await axios.post(PROXY + `admin/record/edit-record/${record_id}`, data);
 }
 
-export const getCsvFile = () => async () => {
-    const res = await axios.get(PROXY + `admin/record/csv`);
+export const getCsvFile = (data) => async () => {
+    const res = await axios.get(PROXY + `admin/record/csv?start_date=${data.start_date}&end_date=${data.end_date}`);
     return res;
 }
 
